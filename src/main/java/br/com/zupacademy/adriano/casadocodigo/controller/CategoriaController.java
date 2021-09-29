@@ -23,12 +23,6 @@ public class CategoriaController {
         this.nomeCategoriaDuplicado = nomeCategoriaDuplicado;
     }
 
-    @InitBinder
-    public void init(WebDataBinder binder) {
-        binder.addValidators(nomeCategoriaDuplicado);
-    }
-
-
     @PostMapping
     @Transactional
     public void cadastrar(@RequestBody @Valid CategoriaForm categoriaForm) throws Exception {

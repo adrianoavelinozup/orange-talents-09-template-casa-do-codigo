@@ -1,5 +1,6 @@
 package br.com.zupacademy.adriano.casadocodigo.controller.form;
 
+import br.com.zupacademy.adriano.casadocodigo.annotation.ValorUnico;
 import br.com.zupacademy.adriano.casadocodigo.model.Autor;
 
 import javax.validation.constraints.Email;
@@ -13,6 +14,7 @@ public class AutorForm {
 
     @NotEmpty
     @Email
+    @ValorUnico(nomeDoCampo = "email", classeDaEntidade = Autor.class, message = "Email já está cadastrado. Escolha outro email")
     private String email;
 
     @NotEmpty
