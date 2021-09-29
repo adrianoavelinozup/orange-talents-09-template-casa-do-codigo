@@ -1,5 +1,7 @@
 package br.com.zupacademy.adriano.casadocodigo.annotation;
 
+import org.springframework.util.Assert;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -27,6 +29,7 @@ public class ValidadorUnicoValidator implements ConstraintValidator<ValorUnico, 
         Query query = entityManager.createQuery(jpql);
         query.setParameter("pValorDoNomeDoCampo", valorDoNomeDoCampo);
         List resultList = query.getResultList();
+        Assert.state(resultList.size() <=1, "Foi encontrado mais de um "+ classeDaEntidade +" com o atributo "+ nomeDoCampo +" = "+ valorDoNomeDoCampo);
         return resultList.isEmpty();
     }
 }
