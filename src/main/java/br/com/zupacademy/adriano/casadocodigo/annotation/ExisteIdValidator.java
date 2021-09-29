@@ -1,5 +1,7 @@
 package br.com.zupacademy.adriano.casadocodigo.annotation;
 
+import org.springframework.util.Assert;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -7,7 +9,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
 
-public class ExisteValidator implements ConstraintValidator<Existe, Object> {
+public class ExisteIdValidator implements ConstraintValidator<ExisteId, Object> {
     private String nomeDoCampo;
     private Class<?> classeDaEntidade;
 
@@ -15,7 +17,7 @@ public class ExisteValidator implements ConstraintValidator<Existe, Object> {
     private EntityManager entityManager;
 
     @Override
-    public void initialize(Existe constraintAnnotation) {
+    public void initialize(ExisteId constraintAnnotation) {
         nomeDoCampo = constraintAnnotation.nomeDoCampo();
         classeDaEntidade = constraintAnnotation.classeDaEntidade();
     }
@@ -26,7 +28,9 @@ public class ExisteValidator implements ConstraintValidator<Existe, Object> {
 
         Query query = entityManager.createQuery(jpql);
         query.setParameter("pValorDoNomeDoCampo", valorDoNomeDoCampo);
+
         List resultList = query.getResultList();
+        Assert.isTrue(resultList.size() <=1, "aconteceu algo estranho e você tem mais de um " + classeDaEntidade + " com o atributo " + nomeDoCampo + " com o valor = " + valorDoNomeDoCampo);
         return !resultList.isEmpty();
     }
 }

@@ -1,20 +1,22 @@
 package br.com.zupacademy.adriano.casadocodigo.model;
 
-import br.com.zupacademy.adriano.casadocodigo.annotation.ValorUnico;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.*;
-import javax.validation.Constraint;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "livros", uniqueConstraints = {
-    @UniqueConstraint(columnNames = "titulo", name = "uc_titulo_livro")
+    @UniqueConstraint(columnNames = "titulo", name = "uc_titulo_livro"),
+    @UniqueConstraint(columnNames = "isbn", name = "uc_isbn_livro")
 })
 public class Livro {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotEmpty
+    @Column(nullable = false)
     private String isbn;
 
     @NotEmpty

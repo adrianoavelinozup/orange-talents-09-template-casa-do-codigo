@@ -5,10 +5,10 @@ import javax.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = {ExisteValidator.class})
+@Constraint(validatedBy = {ExisteIdValidator.class})
 @Target({ ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Existe {
+public @interface ExisteId {
     String message() default "Não encontrado";
 
     Class<?>[] groups() default { };

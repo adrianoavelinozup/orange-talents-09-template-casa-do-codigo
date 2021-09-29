@@ -1,15 +1,16 @@
 package br.com.zupacademy.adriano.casadocodigo.controller.form;
 
-import br.com.zupacademy.adriano.casadocodigo.annotation.Existe;
+import br.com.zupacademy.adriano.casadocodigo.annotation.ExisteId;
 import br.com.zupacademy.adriano.casadocodigo.annotation.ValorUnico;
 import br.com.zupacademy.adriano.casadocodigo.model.Autor;
 import br.com.zupacademy.adriano.casadocodigo.model.Categoria;
 import br.com.zupacademy.adriano.casadocodigo.model.Livro;
-import br.com.zupacademy.adriano.casadocodigo.repository.AutorRepository;
-import br.com.zupacademy.adriano.casadocodigo.repository.CategoriaRepository;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.util.Assert;
 
+import javax.persistence.EntityManager;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -50,23 +51,28 @@ public class LivroForm {
 
     @Future
     @JsonProperty
+    @JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING)
     private LocalDate dataLancamento;
 
-    @NotEmpty
+    @NotNull
     @JsonProperty
-    @Existe(nomeDoCampo = "nome", classeDaEntidade = Categoria.class,
+    @ExisteId(nomeDoCampo = "id", classeDaEntidade = Categoria.class,
             message = "Não encontrada")
-    private String nomeDaCategoria;
+    private Long idCategoria;
 
-    @NotEmpty @Email
-    @Existe(nomeDoCampo = "email", classeDaEntidade = Autor.class)
+    @NotNull
+    @ExisteId(nomeDoCampo = "id", classeDaEntidade = Autor.class)
     @JsonProperty
-    private String emailDoAutor;
+    private Long idAutor;
 
-    public Livro toMap(AutorRepository autorRepository, CategoriaRepository categoriaRepository) {
-        Optional<Autor> autor = autorRepository.findByEmail(emailDoAutor);
-        Optional<Categoria> categoria = categoriaRepository.findByNome(nomeDaCategoria);
+    public Livro toMap(EntityManager entityManager) {
+        Autor autor = entityManager.find(Autor.class, idAutor);
+        Categoria categoria = entityManager.find(Categoria.class, idCategoria);
+
+        Assert.state(autor!=null,"Você esta querendo cadastrar um livro para um autor que não existe no banco da dados, com id  " + idAutor);
+        Assert.state(categoria!=null,"Você esta querendo cadastrar um livro para uma categoria que não existe no banco de dados, com id " + idCategoria);
+
         return new Livro(isbn, titulo, resumo, sumario, preco,
-                numeroPaginas, dataLancamento, categoria.get(), autor.get());
+                numeroPaginas, dataLancamento, categoria, autor);
     }
 }
