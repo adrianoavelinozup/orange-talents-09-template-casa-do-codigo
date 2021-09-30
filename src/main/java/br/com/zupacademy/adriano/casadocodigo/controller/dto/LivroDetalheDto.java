@@ -22,9 +22,7 @@ public class LivroDetalheDto {
     @JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING)
     private LocalDate dataLancamento;
 
-    private String tituloDaCategoria;
-
-    private String nomeDoAutor;
+    private AutorDetalheDto autor;
 
     public LivroDetalheDto(Livro livro) {
         this.isbn = livro.getIsbn();
@@ -34,8 +32,7 @@ public class LivroDetalheDto {
         this.preco  = livro.getPreco();
         this.numeroPaginas  = livro.getNumeroPaginas();
         this.dataLancamento  = livro.getDataLancamento();
-        this.tituloDaCategoria  = livro.getCategoria().getNome();
-        this.nomeDoAutor  = livro.getAutor().getNome();
+        this.autor = new AutorDetalheDto(livro.getAutor());
     }
 
     public String getIsbn() {
@@ -66,11 +63,8 @@ public class LivroDetalheDto {
         return dataLancamento;
     }
 
-    public String getTituloDaCategoria() {
-        return tituloDaCategoria;
-    }
-
-    public String getNomeDoAutor() {
-        return nomeDoAutor;
+    public AutorDetalheDto getAutor() {
+        return autor;
     }
 }
+
