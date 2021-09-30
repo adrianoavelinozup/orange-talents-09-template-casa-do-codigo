@@ -40,4 +40,8 @@ public class Autor {
         this.email = email;
         this.descricao = descricao;
     }
+
+    public String getNome() {
+        return nome;
+    }
 }
