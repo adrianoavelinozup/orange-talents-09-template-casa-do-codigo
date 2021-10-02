@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Target({ ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EstadoValido {
-    String message() default "não pode ser nulo";
+    String message() default "selecione um Estado válido";
 
     Class<?>[] groups() default { };
 

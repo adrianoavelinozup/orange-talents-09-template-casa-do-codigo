@@ -27,31 +27,21 @@ public class EstadoValidoValidator implements ConstraintValidator<EstadoValido, 
         query.setParameter("pPaisId", clienteForm.getPaisId());
         int quantidadeDeEstadosPorPais = query.getResultList().size();
 
-        if (quantidadeDeEstadosPorPais == 0) {
-            if (clienteForm.getEstadoId() == null) return true;
-            message = "Estado não pertence a esse País";
-            constraintValidatorContext.disableDefaultConstraintViolation();
-            constraintValidatorContext.buildConstraintViolationWithTemplate(message).addPropertyNode("estadoId").addConstraintViolation();
-            return false;
-        } else {
-            if (clienteForm.getEstadoId() == null) {
-                constraintValidatorContext.disableDefaultConstraintViolation();
-                constraintValidatorContext.buildConstraintViolationWithTemplate(message).addPropertyNode("estadoId").addConstraintViolation();
-                return false;
-            }
-
+        if (quantidadeDeEstadosPorPais > 0) {
             String jpqlEstadoPertenceAoPais = "SELECT estado FROM Estado estado WHERE estado.pais.id = :pPaisId AND estado.id = :pEstadoId";
             Query queryEstadoPertenceAoPais = entityManager.createQuery(jpqlEstadoPertenceAoPais);
             queryEstadoPertenceAoPais.setParameter("pPaisId", clienteForm.getPaisId());
             queryEstadoPertenceAoPais.setParameter("pEstadoId", clienteForm.getEstadoId());
             boolean estadoPertenceAoPais = !queryEstadoPertenceAoPais.getResultList().isEmpty();
 
-            if (estadoPertenceAoPais) return true;
-
-            message = "Estado não pertence a esse País";
+            message = "Selecione um Estado válido";
             constraintValidatorContext.disableDefaultConstraintViolation();
             constraintValidatorContext.buildConstraintViolationWithTemplate(message).addPropertyNode("estadoId").addConstraintViolation();
-            return false;
+            return estadoPertenceAoPais;
         }
+        message = "Estado não pertence a este País";
+        constraintValidatorContext.disableDefaultConstraintViolation();
+        constraintValidatorContext.buildConstraintViolationWithTemplate(message).addPropertyNode("estadoId").addConstraintViolation();
+        return clienteForm.getEstadoId() == null;
     }
 }

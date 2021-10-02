@@ -1,9 +1,6 @@
 package br.com.zupacademy.adriano.casadocodigo.controller.form;
 
-import br.com.zupacademy.adriano.casadocodigo.annotation.CpfOuCnpj;
-import br.com.zupacademy.adriano.casadocodigo.annotation.EstadoValido;
-import br.com.zupacademy.adriano.casadocodigo.annotation.ExisteId;
-import br.com.zupacademy.adriano.casadocodigo.annotation.ValorUnico;
+import br.com.zupacademy.adriano.casadocodigo.annotation.*;
 import br.com.zupacademy.adriano.casadocodigo.model.Cliente;
 import br.com.zupacademy.adriano.casadocodigo.model.Estado;
 import br.com.zupacademy.adriano.casadocodigo.model.Pais;
@@ -27,7 +24,7 @@ public class ClienteForm {
     private String sobrenome;
 
     @NotEmpty
-    @CpfOuCnpj(classeDaEntidade = Cliente.class, nomeDoCampo = "documento")
+    @DocumentoValido
     private String documento;
 
     @NotEmpty
