@@ -24,6 +24,7 @@ public class ExisteIdValidator implements ConstraintValidator<ExisteId, Object> 
 
     @Override
     public boolean isValid(Object valorDoNomeDoCampo, ConstraintValidatorContext constraintValidatorContext) {
+        if (valorDoNomeDoCampo == null) return true;
         String jpql = "SELECT e FROM " + classeDaEntidade.getName() + " e WHERE " + nomeDoCampo + " = :pValorDoNomeDoCampo";
 
         Query query = entityManager.createQuery(jpql);
